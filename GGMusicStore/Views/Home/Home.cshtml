@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Welcome!";
+    var hotAlbums = (IEnumerable<Album>)ViewData["hotAlbums"];
+    var newAlbums = (IEnumerable<Album>)ViewData["newAlbums"];
+    var isodd = 0;
+}
+
+<!-- banner start -->
+<!-- ================ -->
+<div id="banner" class="banner">
+    <div class="banner-image"></div>
+    <div class="banner-caption" style="top:50%">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 object-non-visible" data-animation-effect="fadeIn">
+                    <h1 class="text-center">Welcome To <span>GGMusic</span></h1>
+                    <p class="lead text-center">Music is an art form and cultural activity whose medium is sound organized in time. The common elements of music are pitch , rhythm , dynamics, and the sonic qualities of timbre and texture . </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- banner end -->
+<!-- section start -->
+<!-- ================ -->
+<div class="section clearfix object-non-visible" data-animation-effect="fadeIn">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 id="about" class="title text-center">畅销 <span>专辑</span></h1>
+                <p class="lead text-center">如果犹豫不决,不如看看大家的选择!</p>
+                @foreach (var item in hotAlbums)
+                {
+                    if (isodd % 2 == 0)
+                    {
+                <div class="space"></div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="@item.AlbumArtUrl" width="400" height="400" alt="">
+                        <div class="space"></div>
+                    </div>
+                    <div class="col-md-7">
+                        <h2>@item.AlbumName</h2>
+                        <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                        <p>@item.Description</p>
+                    </div>
+                </div>
+                    }
+                    else
+                    {
+                <div class="space"></div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <h2>@item.AlbumName</h2>
+                        <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                        <p>@item.Description</p>
+                    </div>
+                    <div class="col-md-5">
+                        <img src="@item.AlbumArtUrl" width="400" height="400" alt="">
+                        <div class="space"></div>
+                    </div>
+                </div>
+                    }
+                    isodd++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- section end -->
+<!-- section start -->
+<!-- ================ -->
+<div class="section clearfix object-non-visible" data-animation-effect="fadeIn">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 id="about" class="title text-center"><span>最新</span>专辑</h1>
+                <p class="lead text-center">最新专辑,看看有没有你喜欢的吧!</p>
+                @foreach (var item in newAlbums)
+                {
+                    if (isodd % 2 == 0)
+                    {
+                    <div class="space"></div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img src="@item.AlbumArtUrl" width="400" height="400" alt="">
+                            <div class="space"></div>
+                        </div>
+                        <div class="col-md-7">
+                            <h2>@item.AlbumName</h2>
+                            <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                            <p>@item.Description</p>
+                        </div>
+                    </div>
+                    }
+                    else
+                    {
+                    <div class="space"></div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h2>@item.AlbumName</h2>
+                            <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                            <p>@item.Description</p>
+                        </div>
+                        <div class="col-md-5">
+                            <img src="@item.AlbumArtUrl" width="400" height="400" alt="">
+                            <div class="space"></div>
+                        </div>
+                    </div>
+                    }
+                    isodd++;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<!-- section end -->
+
+<script>
+    $(document).ready(function () {
+        $(".banner-image").backstretch(['images/Taylor.jpg',
+                                        'images/zhoujielun.jpg',
+                                        'images/xuezhiqian.jpg',
+                                        'images/playjita.jpg',
+                                        'images/jita.jpg',
+                                        'images/changpian.jpg',
+                                        'images/changpiancolor.jpg',
+                                        'images/Dj.jpg',
+                                        'images/airphonehead.jpg',
+                                        'images/oldradio.jpg',
+                                        'images/bedstory.jpg',
+                                        'images/drum.jpg'],
+                                           {
+                                               duration: 5000,
+                                               fade: 1000,
+                                               preload: 1
+                                           });
+    });
+</script>

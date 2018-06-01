@@ -1,0 +1,44 @@
+﻿<div class="panel-body">
+    @using (Html.BeginForm("_SaveAlbumArt", "ControlPanel", FormMethod.Post, new { @id = "uploadFile", @role = "form", @enctype = "multipart/form-data" }))
+    {
+    <a class="btn btn-info" role="button" style="display:inline-block; width:200px; height:30px; position:relative; overflow:hidden; color:#fff">
+        <input type="file" name="file" accept="image/png,image/gif,image/jpeg,image/bmp" style="position:absolute; right:0; top:0; font-size:100px; opacity:0; filter:alpha(opacity=0)" id="uploadAlbumArt" />上传音乐专辑封面
+    </a>
+        <button type="button" id="upload" style="display:none;"></button>
+    }
+</div>
+<script src="~/Scripts/jquery.form.js"></script>
+<script>
+    //function SaveAlbumArtSuccess(data) {
+    //    if (data.MessageType) {
+    //        $('#albumArtImg').attr('src', data.MessageContent);
+    //        layer.msg('成功上传专辑封面', { icon: 1 });
+    //        $('#albumArtUrlHidden').val(data.MessageContent);
+    //        layer.closeAll();
+    //    }
+    //    else {
+    //        layer.msg(data.MessageContent, { icon: 2 });
+    //    }
+    //}
+
+    $('#uploadAlbumArt').on('change', function () {
+        //$('#upload').click();
+        debugger
+        $("#uploadFile").ajaxSubmit({
+            url: "@Url.Action("_SaveAlbumArt", "ControlPanel")",
+            type: "post",
+            success: function (json) {
+                var data = $.parseJSON(json.replace(/<.*?>/ig, ""));
+                if (data.MessageType) {
+                    $('#albumArtImg').attr('src', data.MessageContent);
+                    layer.msg('成功上传专辑封面', { icon: 1 });
+                    $('#albumArtUrlHidden').val(data.MessageContent);
+                    layer.close(layer.index - 1);
+                }
+                else {
+                    layer.msg(data.MessageContent, { icon: 2 });
+                }
+            }
+        });
+    })
+</script>

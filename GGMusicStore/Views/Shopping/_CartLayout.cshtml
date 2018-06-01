@@ -1,0 +1,14 @@
+﻿<a role="button" class="fa fa-shopping-cart" href="@Url.Action("ManageCart","Shopping")">
+    @if ((int)ViewData["CartCount"] == 0)
+    {
+    <span class="label label-danger">@((int)ViewData["CartCount"])</span>
+    }
+    else if ((int)ViewData["CartCount"] >= 10)
+    {
+    <span class="label label-warning">@((int)ViewData["CartCount"])</span>
+    }
+    else
+    {
+    <span class="label label-success">@((int)ViewData["CartCount"])</span>
+    }
+</a>

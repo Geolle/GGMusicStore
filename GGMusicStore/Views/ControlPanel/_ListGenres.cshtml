@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Genre>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-hover table-responsive" style="color:black">
+        <thead>
+            <tr>
+                <th>流派名称</th>
+                <th>流派Id</th>
+                <th>流派描述</th>
+                <th>流派所含专辑数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.GenreName</td>
+                <td>@item.GenreId</td>
+                <td title="@item.Description">@UIHelper.Truncate(item.Description, 50)</td>
+                <td>@item.AlbumNum</td>
+                <td>
+                    <a href="javaScript:;" role="button" title="编辑" onclick="layermodal('编辑流派','@Url.Action("_EditGenre","ControlPanel",new RouteValueDictionary { { "genreId",item.GenreId} })','450px','400px')"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a href="javaScript:;" role="button" title="删除" class="deleteGenre" data-genreid="@item.GenreId"><i class="fa fa-trash fa-lg"></i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="row text-warning text-center wrapper">
+        没有查询到流派数据
+    </div>
+}
+<script>
+    $('.deleteGenre').on('click', function () {
+        var $this = $(this);
+        layer.confirm("确定要删除么？",
+            { btn: ["确定", "取消"], icon: 3 }, function () {
+                var genreId = $this.data('genreid');
+                $.post('@Url.Action("DeleteGenre","ControlPanel")', { genreId: genreId, t: (new Date()).valueOf() }, function (data) {
+                    if (data.MessageType) {
+                        layer.msg(data.MessageContent, { icon: 1 });
+                        //异步刷新列表
+                        $.get('@Url.Action("_ListGenres", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                            $('#_ListGenres').html(html);
+                        });
+                    }
+                    else {
+                        layer.msg(data.MessageContent, { icon: 2 });
+                    }
+                });
+            });
+    });
+</script>

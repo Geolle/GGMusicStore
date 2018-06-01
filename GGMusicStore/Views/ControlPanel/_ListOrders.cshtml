@@ -1,0 +1,81 @@
+﻿@model PagingDataSet<Order>
+@{
+}
+@if (Model != null && Model.Any())
+{
+    foreach (var order in Model)
+    {
+    <table class="table table-hover table-responsive table-bordered" style="color:black">
+        <thead style="background-color:lightgray">
+            <tr>
+                <th title="@order.UserName">用户名: @UIHelper.Truncate(order.UserName, 10)</th>
+                <th>姓名: @order.TrueName</th>
+                <th>电话: @order.Phone</th>
+                <th title="@order.Address">地址: @UIHelper.Truncate(order.Address, 16)</th>
+                <th>日期: @order.OrderDate</th>
+                <th>金额: @order.Total</th>
+                <th>
+                    状态:
+                    <a href="javaScript:;" class="isDeal" data-orderid="@order.OrderId" data->
+                        @if (order.IsDeal)
+                        {
+                        <span class="label label-success">已发货</span>
+                        }
+                        else
+                        {
+                        <span class="label label-warning">未发货</span>
+                        }
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in order.OrderDetails)
+            {
+            <tr>
+                <td><img src="@item.Album.AlbumArtUrl" width="60" height="60" /></td>
+                <td title="@item.Album.AlbumName">
+                    @UIHelper.Truncate(item.Album.AlbumName, 30)
+                </td>
+                <td>数量: @item.Quantity</td>
+                <td colspan="4">小计: @item.UnitPrice</td>
+            </tr>
+            }
+            <tr><td colspan="7">备注: @order.Description</td></tr>
+        </tbody>
+    </table>
+    }
+
+    <div class="text-center">
+        @UIHelper.AjaxPagingButton(Model.PageSize, Model.PageIndex, Model.TotalRecords, Model.PageCount, Url.Action("_ListOrders", "ControlPanel"), "_ListOrders")
+    </div>
+}
+else
+{
+    <div class="row text-warning text-center wrapper">
+        没有查询到订单数据
+    </div>
+}
+
+<script>
+    $('.isDeal').on('click', function () {
+    debugger
+        var $this = $(this);
+        layer.confirm("确定要修改订单状态么？",
+            { btn: ["确定", "取消"], icon: 3 }, function () {
+                var orderId = $this.data('orderid');
+                $.post('@Url.Action("ChangeOrderState","ControlPanel")', { orderId: orderId, t: (new Date()).valueOf() }, function (data) {
+                    if (data.MessageType) {
+                        layer.msg(data.MessageContent, { icon: 1 });
+                        //异步刷新列表
+                        $.get('@Url.Action("_ListOrders", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                            $('#_ListOrders').html(html);
+                        });
+                    }
+                    else {
+                        layer.msg(data.MessageContent, { icon: 2 });
+                    }
+                });
+            });
+    });
+</script>

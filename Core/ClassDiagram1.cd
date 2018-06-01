@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Core.MusicInfo.Album">
+    <Position X="1.5" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAgAAQAooAAAAAIAEAAAgIAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Album\Album.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MusicInfo.AlbumService">
+    <Position X="3.25" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAAAAAAAABAAAJAAAAAAAEAAEAAAgAAAAAAEAA=</HashCode>
+      <FileName>Album\AlbumService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MusicInfo.Artist">
+    <Position X="4.5" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAggAAAAAAAEAAAAAAAAACAAAAAAAAACAA=</HashCode>
+      <FileName>Artist\Artist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MusicInfo.ArtistService">
+    <Position X="6.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAABAAABAAAAAAAEAAEAAAgAAAAAAAAA=</HashCode>
+      <FileName>Artist\ArtistService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MusicInfo.Genre">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgoAAAAAAAAAAAAAAAAAAAAAAACAAAAAI=</HashCode>
+      <FileName>Genre\Genre.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MusicInfo.GenreService">
+    <Position X="2.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAAAAABAAABAAAAAAAEAAEAAAgAAAAAAAAA=</HashCode>
+      <FileName>Genre\GenreService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Data.MusicStoreEntities">
+    <Position X="8.5" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAABIACAAAAAAAAAAAAEAACAAAAAA=</HashCode>
+      <FileName>Data\MusicStoreEntities.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Data.SampleData">
+    <Position X="9.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\SampleData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Shopping.Cart">
+    <Position X="5.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAgAAAAAAAAAAECAIACAA=</HashCode>
+      <FileName>Cart\Cart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Shopping.CartService" Collapsed="true">
+    <Position X="5.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAhAAAAAACABAAAAAAACAAAAAAAAgAAAAADA=</HashCode>
+      <FileName>Cart\CartService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Shopping.Order">
+    <Position X="7.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAAAAAAAACAgAAAAIBAACAAAAAAAQAACAQAAIAAAAAA=</HashCode>
+      <FileName>Order\Order.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Shopping.OrderDetail">
+    <Position X="9.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAiQAAAAA=</HashCode>
+      <FileName>Order\OrderDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Shopping.OrderService" Collapsed="true">
+    <Position X="7.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Order\OrderService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "订单管理";
+}
+
+@Styles.Render("~/Content/Styles/layer")
+@Scripts.Render("~/bundles/Scripts/layer")
+<div class="default-bg space">
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="container">
+        <div class="row tn-page-heading tn-mb-10">
+            <div class="col-lg-12">
+                <h3>所有订单</h3>
+            </div>
+        </div>
+        @*<div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        订单状态
+                        <select class="filter form-control">
+                            <option value="">全部</option>
+                            <option value="true">未发货</option>
+                            <option value="false">已发货</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="_ListOrders">
+                    @Html.Action("_ListOrders", "ControlPanel")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

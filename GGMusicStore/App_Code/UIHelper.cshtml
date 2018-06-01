@@ -1,0 +1,144 @@
+﻿@*截字处理*@
+@helper Truncate(string input, int length)
+{
+if (string.IsNullOrEmpty(input) || input.Length <= length)
+{
+    @input
+}
+else
+{
+    @input.Substring(0, length)<text>...</text>
+}
+}
+
+@*分页按钮*@
+@helper AjaxPagingButton(int pageSize = 20, int pageIndex = 1, long totalRecords = 0, int pageCount = 1, string href = "", string updateTargetId = "")
+{
+if (totalRecords > 0 && pageCount > 1)
+{
+    if (pageCount < 11)
+    {
+    <ul class="pagination" data-ajaxloadurl="@href">
+        <li><a href="javaScript:;">&laquo;</a></li>
+        @for (int i = 1; i < pageCount + 1; i++)
+        {
+        <li><a href="javaScript:;">@i</a></li>
+        }
+        <li><a href="javaScript:;">&raquo;</a></li>
+    </ul>
+    }
+    else
+    {
+        if (pageIndex <= 5)
+        {
+        <ul class="pagination" data-ajaxloadurl="@href">
+            <li><a href="javaScript:;">&laquo;</a></li>
+            @for (int i = 1; i < 7; i++)
+            {
+            <li><a href="javaScript:;">@i</a></li>
+            }
+            <li><span>...</span></li>
+            <li><a href="javaScript:;">@(pageCount - 1)</a></li>
+            <li><a href="javaScript:;">@pageCount</a></li>
+            <li><a href="javaScript:;">&raquo;</a></li>
+        </ul>
+        }
+        else if (pageIndex > pageCount - 6)
+        {
+        <ul class="pagination" data-ajaxloadurl="@href">
+            <li><a href="javaScript:;">&laquo;</a></li>
+            <li><a href="javaScript:;">1</a></li>
+            <li><a href="javaScript:;">2</a></li>
+            <li><span>...</span></li>
+            @for (int i = pageCount - 5; i < pageCount + 1; i++)
+            {
+            <li><a href="javaScript:;">@i</a></li>
+            }
+            <li><a href="javaScript:;">&raquo;</a></li>
+        </ul>
+            }
+            else
+            {
+            <ul class="pagination" data-ajaxloadurl="@href">
+                <li><a href="javaScript:;">&laquo;</a></li>
+                <li><a href="javaScript:;">1</a></li>
+                <li><a href="javaScript:;">2</a></li>
+                <li><span>...</span></li>
+                @for (int i = pageIndex - 2; i < pageIndex + 3; i++)
+                {
+                <li><a href="javaScript:;">@i</a></li>
+                }
+                <li><span>...</span></li>
+                <li><a href="javaScript:;">@(pageCount - 1)</a></li>
+                <li><a href="javaScript:;">@pageCount</a></li>
+                <li><a href="javaScript:;">&raquo;</a></li>
+            </ul>
+        }
+    }
+    <script>
+        $('.pagination a').on('click', function () {
+            var ajaxLoadUrl = $('.pagination').data('ajaxloadurl');
+            var updateTargetId = '@updateTargetId';
+            href = $('.pagination').data('ajaxloadurl');
+
+            if (updateTargetId && ajaxLoadUrl) {
+                if (!isNaN($(this).text())) {
+                    pageIndex = $(this).text();
+                }
+
+                if (href.indexOf('pageIndex=') > 0) {
+                    href = href.replace(/pageIndex=[0-9]+/, "pageIndex=" + pageIndex);
+                    href = href.replace(/&t=[0-9]+/, "&t=" + (new Date()).valueOf());
+                } else {
+                    href = href + (href.indexOf('?') > 0 ? "&" : "?") + "pageIndex=" + pageIndex + "&t=" + (new Date()).valueOf();
+                }
+                $.get(href, function (data) {
+                    $('#' + updateTargetId).html(data);
+                });
+            }
+            else {
+                if (!isNaN($(this).text())) {
+                    pageIndex = $(this).text();
+                }
+                if (href.indexOf('pageIndex=') > 0) {
+                    href = href.replace(/pageIndex=[0-9]+/, "pageIndex=" + pageIndex);
+                } else {
+                    href = href + (href.indexOf('?') > 0 ? "&" : "?") + "pageIndex=" + pageIndex;
+                }
+                window.location = href;
+            }
+        });
+
+        //$(document).ajaxComplete(function (event, xhr, options) {
+        //    var url = options.url.toLowerCase();
+        //    debugger
+        //    if (url) {
+        //        $('.pagination').data('ajaxloadurl', url);
+        //    }
+        //});
+    </script>
+}
+}
+
+@helper AlbumState(int albumNum = 0, bool albumStatus = false)
+{
+if (albumStatus == false)
+{
+    <span class="label label-default">已下架</span>
+}
+else
+{
+    if (albumNum > 0 && albumNum <= 10)
+    {
+    <span class="label label-warning">销售中</span>
+    }
+    else if (albumNum <= 0)
+    {
+    <span class="label label-danger">已售罄</span>
+    }
+    else
+    {
+    <span class="label label-success">销售中</span>
+    }
+}
+}

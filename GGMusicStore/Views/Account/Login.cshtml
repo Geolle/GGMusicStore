@@ -1,0 +1,100 @@
+﻿@using GGMusicStore.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+@Styles.Render("~/Content/Styles/layer")
+@Scripts.Render("~/bundles/Scripts/layer")
+<!-- banner start -->
+<!-- ================ -->
+<div id="banner" class="banner">
+    <div class="banner-image"></div>
+    <div class="banner-caption" style="top:30%">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 object-non-visible" data-animation-effect="fadeIn">
+                    <h3 class="text-center">Welcome to <span>GGMusicStore</span></h3>
+                    <hr />
+                    @using (Ajax.BeginForm("Login", "Account", null, new AjaxOptions { OnSuccess = "LogInSuccess", OnFailure = "LogInFailure", HttpMethod = "Post" }, new { @class = "form-horizontal" }))
+                    {
+                    @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "请输入用户名或邮箱" })
+                                @Html.ValidationMessageFor(m => m.Email)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-8">
+                                <input id="login" type="submit" value="登录" class="btn btn-default" />
+                            </div>
+                            <p class="col-md-2" style="margin-top:7px">
+                                @Html.ActionLink("注册账号", "Register")
+                            </p>
+                        </div>
+                        @* 在为密码重置功能启用帐户确认后启用此项
+                            <p>
+                                @Html.ActionLink("忘记了密码?", "ForgotPassword")
+                            </p>*@
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- banner end -->
+<script>
+    $(document).ready(function () {
+        $('.banner-image').backstretch('/images/changpiancolor.jpg');
+    });
+
+    function LogInSuccess(data) {
+        if (data.MessageType) {
+            layer.msg(data.MessageContent, { icon: 1, time: 2000 }, function () {
+                $.post('@Url.Action("MigrateCart","Shopping")', function (data) {
+                    if (data.MessageType == 1) {
+                        layer.msg(data.MessageContent, { icon: 1, time: 2000 }
+                        , function () {
+                            window.location = "/";
+                        });
+                    }
+                });
+            });
+        }
+        else {
+            layer.msg(data.MessageContent, { icon: 2 });
+        }
+    }
+    function LogInFailure() {
+    }
+</script>
+
+
+@*<div class="row">
+        <div class="col-md-8">
+            <section id="loginForm"></section>
+        </div>
+        <div class="col-md-4">
+            <section id="socialLoginForm">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            </section>
+        </div>
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

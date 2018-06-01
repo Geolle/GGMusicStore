@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Album>
+<style>
+    .isotope-item .btn-default {
+        border-radius: 0px;
+    }
+</style>
+@helper IsNewAlbum(Album album = null)
+{
+if (album != null)
+{
+    if (album.GroundingTime.Subtract(DateTime.Now).Days < 7)
+    {
+    @:new-album
+    }
+}
+}
+@helper IsHotAlbum(Album album = null)
+{
+if ((album.OrderDetails != null && album.OrderDetails.Any()) && album.OrderDetails.Sum(n => n.Quantity) > 10)
+{
+    @:hot-album
+}
+}
+<!-- portfolio items start -->
+<div class="isotope-container row grid-space-20">
+    @foreach (var item in Model)
+    {
+    <div class="col-sm-6 col-md-3 isotope-item genre-@item.GenreId @IsNewAlbum(item) @IsHotAlbum(item)">
+        <div class="image-box">
+            <div class="overlay-container">
+                <img src="@item.AlbumArtUrl" alt="">
+                <a class="overlay" data-toggle="modal" data-target="#album-@item.AlbumId">
+                    <i class="fa fa-search-plus"></i>
+                    <span>@item.Genre.GenreName</span>
+                </a>
+            </div>
+            <a class="btn btn-default btn-block" data-toggle="modal" data-target="#album-@item.AlbumId" title="@item.AlbumName">@UIHelper.Truncate(item.AlbumName, 25)</a>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="album-@item.AlbumId" tabindex="-1" role="dialog" aria-labelledby="album-@item.AlbumId-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="album-@item.AlbumId-label">@item.AlbumName @UIHelper.AlbumState(item.AlbumNum, item.AlbumStatus)</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3>@item.AlbumName</h3>
+                        <h6><a href="javaScript:;" class="genreName" data-genredescription="@item.Genre.Description">@item.Genre.GenreName</a> -- <a href="javaScript:;" class="artistName" data-artistdescription="@item.Artist.Description">@item.Artist.ArtistName</a></h6>
+                        <div class="row">
+                            <div class="col-md-7">
+                                @item.Description
+                            </div>
+                            <div class="col-md-5">
+                                <img src="@item.AlbumArtUrl" alt="专辑封面" width="400" height="400">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <label>剩余数量:</label>
+                        <label>@item.AlbumNum</label>
+                        <label>购买数量:</label>
+                        <input class="toCartNum" type="number" value="1" />
+                        <button type="button" class="btn btn-sm btn-default toCart" data-dismiss="modal" data-albumid="@item.AlbumId">添加到购物车</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal end -->
+    </div>
+    }
+</div>
+<!-- portfolio items end -->
+
+<script>
+    
+
+    $('.genreName').on('click', function () {
+        layer.tips($(this).data('genredescription'), $(this), { tips: [3, '#55acee'] });
+    })
+
+    $('.artistName').on('click', function () {
+        layer.tips($(this).data('artistdescription'), $(this), { tips: [3, '#55acee'] });
+    })
+</script>

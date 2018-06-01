@@ -1,0 +1,105 @@
+﻿@model PagingDataSet<Album>
+@{
+}
+@if (Model != null && Model.Any())
+{
+    <table class="table table-hover table-responsive" style="color:black">
+        <thead>
+            <tr>
+                <th>音乐流派</th>
+                <th>音乐人</th>
+                <th>专辑名称</th>
+                <th>专辑价格</th>
+                <th>剩余数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td title="@item.Genre.GenreName">@UIHelper.Truncate(item.Genre.GenreName, 30)</td>
+                <td title="@item.Artist.ArtistName">@UIHelper.Truncate(item.Artist.ArtistName, 30)</td>
+                <td title="@item.AlbumName">
+                    @UIHelper.Truncate(item.AlbumName, 30)
+                    @UIHelper.AlbumState(item.AlbumNum, item.AlbumStatus)
+                </td>
+                <td title="@item.Price">@item.Price</td>
+                <td>@item.AlbumNum</td>
+                <td>
+                    @*<a href="javaScript:;" role="button" title="详情" onclick="layermodal('专辑详情','@Url.Action("_DetailAlbum","ControlPanel",new RouteValueDictionary { { "albumId",item.AlbumId} })','450px','500px')"><i class="fa fa-pencil fa-lg"></i></a>*@
+                    <a href="javaScript:;" type="button" data-toggle="modal" data-target="#album-@item.AlbumId">
+                        <i class="fa fa-search-plus fa-lg"></i>
+                    </a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="album-@item.AlbumId" tabindex="-1" role="dialog" aria-labelledby="album-@item.AlbumId-label" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title" id="album-@item.AlbumId-label">@item.AlbumName  @UIHelper.AlbumState(item.AlbumNum, item.AlbumStatus)</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>@item.AlbumName</h3>
+                                    <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            @item.Description
+                                        </div>
+                                        <div class="col-md-5">
+                                            <img src="@item.AlbumArtUrl" alt="专辑封面" width="400" height="400">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <label>剩余数量:</label>
+                                    <label>@item.AlbumNum</label>
+                                    <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal end -->
+                    <a href="javaScript:;" role="button" title="编辑" onclick="layermodal('编辑音乐专辑','@Url.Action("_EditAlbum","ControlPanel",new RouteValueDictionary { { "albumId",item.AlbumId} })','450px','500px')"><i class="fa fa-pencil fa-lg"></i></a>
+                    <a href="javaScript:;" role="button" title="删除" class="deleteAlbum" data-albumid="@item.AlbumId"><i class="fa fa-trash fa-lg"></i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="text-center">
+        @UIHelper.AjaxPagingButton(Model.PageSize, Model.PageIndex, Model.TotalRecords, Model.PageCount, Url.Action("_ListAlbums", "ControlPanel"), "_ListAlbums")
+    </div>
+}
+else
+{
+    <div class="row text-warning text-center wrapper">
+        没有查询到音乐专辑数据
+    </div>
+}
+
+
+
+<script>
+    $('.deleteAlbum').on('click', function () {
+        var $this = $(this);
+        layer.confirm("确定要删除么？",
+            { btn: ["确定", "取消"], icon: 3 }, function () {
+                var albumId = $this.data('albumid');
+                $.post('@Url.Action("DeleteAlbum","ControlPanel")', { albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+                    if (data.MessageType) {
+                        layer.msg(data.MessageContent, { icon: 1 });
+                        //异步刷新列表
+                        $.get('@Url.Action("_ListAlbums", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                            $('#_ListAlbums').html(html);
+                        });
+                    }
+                    else {
+                        layer.msg(data.MessageContent, { icon: 2 });
+                    }
+                });
+            });
+    });
+</script>

@@ -1,0 +1,159 @@
+﻿@model Album
+@{
+    var genresSelectList = (SelectList)ViewData["genresSelectList"];
+    var artistsSelectList = (SelectList)ViewData["artistsSelectList"];
+}
+@Scripts.Render("~/bundles/jqueryval")
+<div class="panel">
+    <div class="panel-body">
+        <div class="tab-content col-md-offset-1 col-md-10">
+            @using (Ajax.BeginForm("_EditAlbum", "ControlPanel", new AjaxOptions { OnSuccess = "editSuccess", HttpMethod = "Post" }, new
+            {
+                @class = "form-horizontal tn-form-validation",
+                @id = "_EditAlbum",
+                @role = "form",
+                @enctype = "multipart/form-data"
+            }))
+            {
+            @Html.AntiForgeryToken()
+                @Html.HiddenFor(n => n.AlbumId)
+                <div class="form-group">
+                    @Html.LabelFor(n => n.GenreId, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(n => n.GenreId, genresSelectList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.GenreId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.ArtistId, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(n => n.ArtistId, artistsSelectList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.ArtistId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.AlbumName, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.AlbumName, new { @class = "form-control", @rows = "3" })
+                        @Html.ValidationMessageFor(n => n.AlbumName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Description, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextAreaFor(n => n.Description, new { @class = "form-control", @rows = "4" })
+                        @Html.ValidationMessageFor(n => n.Description)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.AlbumNum, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.AlbumNum, new { @class = "form-control", @type = "number" })
+                        @Html.ValidationMessageFor(n => n.AlbumNum)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Price, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.Price, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.Price)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.AlbumArtUrl, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.HiddenFor(n => n.AlbumArtUrl, new { @id = "albumArtUrlHidden" })
+                        @if (!string.IsNullOrEmpty(Model.AlbumArtUrl))
+                        {
+                        <img id="albumArtImg" src="@Model.AlbumArtUrl" width="100" height="100" />
+                        }
+                        else
+                        {
+                        <img id="albumArtImg" src="~/images/placeholder.jpg" width="100" height="100" />
+                        }
+                       <button type="button" id="saveAlbumArt"  class="btn btn-info" data-url="@Url.Action("_SaveAlbumArt","ControlPanel")">上传音乐专辑封面图</button>
+                        @Html.ValidationMessageFor(n => n.AlbumArtUrl)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.CheckBoxFor(n => n.AlbumStatus) 是否上架
+                        @Html.ValidationMessageFor(n => n.AlbumStatus)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary col-md-5">保存</button>
+                        <button type="button" class="btn btn-default col-md-offset-2 col-md-5" onclick="layer.closeAll()">取消</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    //暂时先弄成同步, 要把上传和提交表单分开
+    //使用FormData()如果使用异步需要开一个xhr.send()
+
+    //表单成功提交后
+    function editSuccess(data) {
+        if (data.MessageType) {
+            layer.closeAll();
+            layer.msg(data.MessageContent, { icon: 1 });
+            //异步刷新列表
+            $.get('@Url.Action("_ListAlbums", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                $('#_ListAlbums').html(html);
+            });
+            //window.location.reload();
+        }
+        else {
+            layer.msg(data.MessageContent, { icon: 2 });
+        }
+    }
+
+    
+    @*$('.submit').on('click', function () {
+        $('#_EditAlbum').validate();
+        if ($('#_EditAlbum').valid()) {
+            var formData = new FormData($('#_EditAlbum')[0]);
+            $.post('@Url.Action("_EditAlbum", "ControlPanel")', formData, function (data) {
+                if (data.MessageType) {
+                    layer.closeAll();
+                    layer.msg(data.MessageContent, { icon: 1 });
+                    //异步刷新列表
+                    $.get('@Url.Action("_ListAlbums", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                        $('#_ListAlbums').html(html);
+                    });
+                    //window.location.reload();
+                }
+                else {
+                    layer.msg(data.MessageContent, { icon: 2 });
+                }
+            });
+
+        }
+    });*@
+
+    $('#saveAlbumArt').on('click', function () {
+        var url = $(this).data('url');
+        $.get(url, function (data) {
+            layer.open({
+                type: 1,
+                shade: false,
+                title: false,
+                content: data
+            });
+        });
+    });
+
+
+
+  
+
+</script>

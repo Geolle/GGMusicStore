@@ -1,0 +1,67 @@
+﻿@model ArtistEditModel
+@{
+    var genresMultiSelect =(MultiSelectList)ViewData["genresMultiSelect"];
+}
+@Scripts.Render("~/bundles/jqueryval")
+<div class="panel">
+    <div class="panel-body">
+        <div class="tab-content col-md-offset-1 col-md-10">
+            @using (Html.BeginForm("_EditArtist", "ControlPanel", FormMethod.Post, new { @class = "form-horizontal tn-form-validation", @id = "_EditArtist", @role = "form" }))
+            {
+            @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(n => n.ArtistId)
+                <div class="form-group">
+                    @Html.LabelFor(n => n.ArtistName, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.ArtistName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.ArtistName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Description, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextAreaFor(n => n.Description, new { @class = "form-control", @rows = "3" })
+                        @Html.ValidationMessageFor(n => n.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(n => n.ArtistGenres, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.ListBoxFor(n => n.ArtistGenres, genresMultiSelect, new { @class = "form-control", @rows = "3" })
+                        @Html.ValidationMessageFor(n => n.ArtistGenres)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary col-md-5 submit">保存</button>
+                        <button type="button" class="btn btn-default col-md-offset-2 col-md-5" onclick="layer.closeAll()">取消</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+
+    $('.submit').on('click', function () {
+        $('#_EditArtist').validate();
+        if ($('#_EditArtist').valid()) {
+            $.post('@Url.Action("_EditArtist", "ControlPanel")', $('#_EditArtist').serialize(), function (data) {
+                if (data.MessageType) {
+                    layer.closeAll();
+                    layer.msg(data.MessageContent, { icon: 1 });
+                    //异步刷新列表
+                    $.get('@Url.Action("_ListArtists", "ControlPanel")', { t: (new Date()).valueOf() }, function (html) {
+                        $('#_ListArtists').html(html);
+                    });
+                }
+                else {
+                    layer.msg(data.MessageContent, { icon: 2 });
+                }
+            });
+        }
+    });
+</script>

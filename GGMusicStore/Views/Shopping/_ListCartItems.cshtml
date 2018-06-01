@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Cart>
+@if (Model != null && Model.Any())
+{
+    <table class="table table-hover table-responsive" style="color:black">
+        <thead>
+            <tr>
+                <th>专辑名称</th>
+                <th>价格</th>
+                <th>数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr data-albumid="@item.Album.AlbumId" data-itemcount="@item.Count">
+                <td title="@item.Album.AlbumName">
+                    @UIHelper.Truncate(item.Album.AlbumName, 30)
+                    @UIHelper.AlbumState(item.Album.AlbumNum, item.Album.AlbumStatus)
+                </td>
+                <td>@item.Album.Price</td>
+                <td>@item.Count</td>
+                <td>
+                    <a href="javaScript:;" role="button" title="多买一张" class="addOne" data-albumid="@item.Album.AlbumId"><i class="fa fa-plus-square fa-lg"></i></a>
+                    <a href="javaScript:;" role="button" title="少买一张" class="removeOne" data-albumid="@item.Album.AlbumId"><i class="fa fa-minus-square fa-lg"></i></a>
+                    <a href="javaScript:;" role="button" title="删除" class="removeCartItem" data-albumid="@item.Album.AlbumId"><i class="fa fa-trash fa-lg"></i></a>
+                </td>
+            </tr>
+            }
+            <tr>
+                <td colspan="3">总计: @((decimal)ViewData["TotalMoney"])</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="row text-warning text-center wrapper">
+        您的购物者空空如也,赶快去挑选喜爱的专辑吧~
+    </div>
+}
+
+
+<script>
+    $('.addOne').on('click', function () {
+        var $this = $(this);
+        var albumId = $this.data('albumid');
+        $.post('@Url.Action("AddToCart","Shopping")', { toCartNum: 1, albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+            if (data.MessageType) {
+                layer.msg(data.MessageContent, { icon: 1 });
+                //异步刷新列表
+                $.get('@Url.Action("_ListCartItems", "Shopping")', { t: (new Date()).valueOf() }, function (html) {
+                    $('#_ListCartItems').html(html);
+                });
+                //异步刷新导航购物车中专辑数量
+                $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                    $('#_CartLayout').html(html);
+                });
+            }
+            else {
+                layer.msg(data.MessageContent, { icon: 2 });
+            }
+        })
+    });
+
+    $('.removeOne').on('click', function () {
+        debugger
+        var $this = $(this);
+        var albumId = $this.data('albumid');
+        var itemCount = $this.closest('tr').data('itemcount');
+        if (itemCount == 1) {
+            layer.confirm("确定要将该专辑从您的购物车中移除么？",
+            { btn: ["确定", "取消"], icon: 3 }, function () {
+                $.post('@Url.Action("DeleteCartItem", "Shopping")', { deleteNum: 1, albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+                    if (data.MessageType) {
+                        layer.msg(data.MessageContent, { icon: 1 });
+                        //异步刷新列表
+                        $.get('@Url.Action("_ListCartItems", "Shopping")', { t: (new Date()).valueOf() }, function (html) {
+                            $('#_ListCartItems').html(html);
+                        });
+                        //异步刷新导航购物车中专辑数量
+                        $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                            $('#_CartLayout').html(html);
+                        })
+                    }
+                    else {
+                        layer.msg(data.MessageContent, { icon: 2 });
+                    }
+                });
+            });
+        }
+        else {
+            $.post('@Url.Action("DeleteCartItem", "Shopping")', { deleteNum: 1, albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+                if (data.MessageType) {
+                    layer.msg(data.MessageContent, { icon: 1 });
+                    //异步刷新列表
+                    $.get('@Url.Action("_ListCartItems", "Shopping")', { t: (new Date()).valueOf() }, function (html) {
+                        $('#_ListCartItems').html(html);
+                    });
+                    //异步刷新导航购物车中专辑数量
+                    $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                        $('#_CartLayout').html(html);
+                    })
+                }
+                else {
+                    layer.msg(data.MessageContent, { icon: 2 });
+                }
+            });
+        }
+    });
+
+    $('.removeCartItem').on('click', function () {
+        var $this = $(this);
+        var albumId = $this.data('albumid');
+        var itemCount = $this.closest('tr').data('itemcount');
+        layer.confirm("确定要将该专辑从您的购物车中移除么？",
+        { btn: ["确定", "取消"], icon: 3 }, function () {
+            $.post('@Url.Action("DeleteCartItem", "Shopping")', { deleteNum: itemCount, albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+                if (data.MessageType) {
+                    layer.msg(data.MessageContent, { icon: 1 });
+                    //异步刷新列表
+                    $.get('@Url.Action("_ListCartItems", "Shopping")', { t: (new Date()).valueOf() }, function (html) {
+                        $('#_ListCartItems').html(html);
+                    });
+                    //异步刷新导航购物车中专辑数量
+                    $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                        $('#_CartLayout').html(html);
+                    })
+                }
+                else {
+                    layer.msg(data.MessageContent, { icon: 2 });
+                }
+            });
+        });
+    });
+
+
+
+</script>

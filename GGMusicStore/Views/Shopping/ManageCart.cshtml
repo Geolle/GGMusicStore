@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "我的购物车";
+    var currentUser = Context.User.Identity.Name;
+}
+@Styles.Render("~/Content/Styles/layer")
+@Scripts.Render("~/bundles/Scripts/layer")
+<div class="default-bg space">
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="container">
+        <div class="row tn-page-heading tn-mb-10">
+            <div class="col-lg-12">
+                <h3>我的购物车</h3>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-inline">
+                    <button type="button" class="btn btn-default createOrder"><i class="fa fa-lg fa-shopping-cart "></i> 结算</button>
+
+                    <button class="pull-right btn btn-danger emptyCart"><i class="fa fa-lg fa-trash"></i> 清空购物车</button>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="_ListCartItems">
+                    @Html.Action("_ListCartItems", "Shopping")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $('.emptyCart').on('click', function () {
+        var $this = $(this);
+        layer.confirm("确定要清空购物车么？",
+            { btn: ["确定", "取消"], icon: 3 }, function () {
+                var albumId = $this.data('albumid');
+                $.post('@Url.Action("EmptyCart","Shopping")', { t: (new Date()).valueOf() }, function (data) {
+                    if (data.MessageType) {
+                        layer.msg(data.MessageContent, { icon: 1 });
+                        //异步刷新列表
+                        $.get('@Url.Action("_ListCartItems", "Shopping")', { t: (new Date()).valueOf() }, function (html) {
+                            $('#_ListCartItems').html(html);
+                        });
+                        //异步刷新导航购物车中专辑数量
+                        $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                            $('#_CartLayout').html(html);
+                        })
+                    }
+                    else {
+                        layer.msg(data.MessageContent, { icon: 2 });
+                    }
+                });
+            });
+    });
+
+    $('.createOrder').click(function () {
+        if ('@(string.IsNullOrEmpty(currentUser))'=='True') {
+            layer.msg("请登录", { icon: 5 });
+        }
+        else {
+            $.get('@Url.Action("IsAllAlbumAvailable","Shopping")', function (data) {
+                if (data.MessageType) {
+                    layermodal('生成订单', '@Url.Action("_EditOrder","Shopping")', '900px', '560px')
+                }
+                else {
+                    layer.msg("购物车中包含已售罄的专辑,请移除后再进行结算", { icon: 5 })
+                }
+            })
+        }
+    })
+
+</script>

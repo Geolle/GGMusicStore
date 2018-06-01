@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "音乐商店";
+    var allGenre = (IEnumerable<Genre>)ViewData["allGenre"];
+    var keyword = (string)ViewData["keyword"];
+}
+@Styles.Render("~/Content/Styles/layer")
+@Scripts.Render("~/bundles/Scripts/layer")
+<!-- banner start -->
+<!-- ================ -->
+<div id="banner" class="banner" style="height:100px">
+    <div class="banner-image"></div>
+    <div class="banner-caption" style="top:40%">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 object-non-visible" data-animation-effect="fadeIn">
+                    <h1 class="text-center"><span>音乐</span>商店</h1>
+                    <div class="input-group col-xs-8 col-xs-offset-2" style="margin-bottom:10px">
+                        <input type="text" class="form-control input-searchAlbums" placeholder="可搜索流派、音乐人和专辑名称" style="height:38px">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-searchAlbums" type="button">搜索</button>
+                        </span>
+                    </div>
+                    <p class="lead text-center">在这里,您可以浏览和筛选出您想要的音乐,点击唱片查看唱片的详细信息,并将唱片添加到购物车中。 </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- banner end -->
+
+<div class="section" id="storeMain">
+    <div class="container">
+        <h1 class="text-center title">音乐<span>商店</span></h1>
+        <div class="separator"></div>
+        <p class="lead text-center">在这里,您可以浏览和筛选出您想要的音乐</p>
+        <br>
+        <div class="row object-non-visible" data-animation-effect="fadeIn">
+            <div class="col-md-12">
+                <!-- isotope filters start -->
+                <div class="filters text-center">
+                    <h4>常用筛选</h4>
+                    <ul class="nav nav-pills" data-filter-group="common">
+                        <li class="active"><a href="#" data-filter="">全部</a></li>
+                        <li><a href="#" data-filter=".new-album">最新专辑</a></li>
+                        <li><a href="#" data-filter=".hot-album">畅销专辑</a></li>
+                    </ul>
+                    <br />
+                    <h4>音乐流派</h4>
+                    <ul class="nav nav-pills" data-filter-group="genre">
+                        <li class="active"><a href="#" data-filter="">全部</a></li>
+                        @foreach (var item in allGenre)
+                        {
+                        <li><a href="#" data-filter=".genre-@item.GenreId">@item.GenreName</a></li>
+                        }
+                    </ul>
+                </div>
+                <div id="_ListAlbums">
+                    <!-- isotope filters end -->
+                    @Html.Action("_ListAlbums", "Store",new RouteValueDictionary { { "keyword",keyword} })
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $(".banner-image").backstretch('/images/changpiancolor.jpg');
+    });
+
+    $('.toCart').click(function () {
+        var $this = $(this);
+        var toCartNum = $this.prev().val();
+        var albumId = $this.data('albumid');
+        $.post('@Url.Action("AddToCart","Shopping")', { toCartNum: toCartNum, albumId: albumId, t: (new Date()).valueOf() }, function (data) {
+            if (data.MessageType) {
+                layer.msg(data.MessageContent, { icon: 1 });
+                //异步刷新列表
+                $.get('@Url.Action("_ListAlbums", "Store")', { t: (new Date()).valueOf() }, function (html) {
+                    $('#_ListAlbums').html(html);
+                });
+                //异步刷新导航购物车中专辑数量
+                $.get('@Url.Action("_CartLayout","Shopping")', function (html) {
+                    $('#_CartLayout').html(html);
+                })
+            }
+            else {
+                layer.msg(data.MessageContent, { icon: 2 });
+            }
+        })
+    });
+
+    $('.btn-searchAlbums').on('click', function () {
+        var keyword = $('.input-searchAlbums').val();
+        $.get('@Url.Action("_ListAlbums","Store")', { keyword: keyword, t: (new Date()).valueOf() }, function (html) {
+            $('#_ListAlbums').html(html);
+            location.href = '#storeMain';
+        });
+    })
+
+    $('.input-searchAlbums').on('keyup', function (event) {
+        if (event.keyCode == 13) {
+            $('.btn-searchAlbums').click();
+        }
+    })
+
+
+
+</script>

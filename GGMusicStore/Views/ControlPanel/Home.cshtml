@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "后台主页";
+}
+<div class="default-bg space">
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="space"></div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row" style="height:200px">
+                    <a href="@Url.Action("ManageGenres","ControlPanel")" role="button" title="音乐流派管理" class="col-lg-3 text-center" style="margin-top: 60px"><i class="fa fa-music fa-th-list "style="font-size:8em"></i></a>
+                    <a href="@Url.Action("ManageArtists","ControlPanel")" role="button" title="音乐人管理"  class="col-lg-3 text-center" style="margin-top: 60px"><i class="fa fa-music fa-users "style="font-size:8em"></i></a>
+                    <a href="@Url.Action("ManageAlbums","ControlPanel")" role="button" title="音乐专辑管理" class="col-lg-3 text-center" style="margin-top: 60px"><i class="fa fa-music fa-lg" style="font-size:8em"></i></a>
+                    <a href="@Url.Action("ManageOrders","ControlPanel")" role="button" title="所有订单" class="col-lg-3 text-center" style="margin-top: 60px"><i class="fa fa-file-text fa-lg" style="font-size:8em"></i></a>
+                </div>
+                <div class="row">
+                    <a href="@Url.Action("ManageGenres","ControlPanel")" role="button" title="音乐流派管理" class="col-lg-3 text-center" style="margin-top: 20px">音乐流派管理</a>
+                    <a href="@Url.Action("ManageArtists","ControlPanel")" role="button" title="音乐人管理" class="col-lg-3 text-center" style="margin-top: 20px">音乐人管理</a>
+                    <a href="@Url.Action("ManageAlbums","ControlPanel")" role="button" title="音乐专辑管理" class="col-lg-3 text-center" style="margin-top: 20px">音乐专辑管理</a>
+                    <a href="@Url.Action("ManageOrders","ControlPanel")" role="button" title="所有订单" class="col-lg-3 text-center" style="margin-top: 20px">所有订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
