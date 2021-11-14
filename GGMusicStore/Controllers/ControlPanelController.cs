@@ -17,7 +17,7 @@ namespace GGMusicStore
         private GenreService genreService;
         private ArtistService artistService;
         private OrderService orderService;
-        public ControlPanelController(AlbumService albumService, GenreService genreService, ArtistService artistService,OrderService orderService)
+        public ControlPanelController(AlbumService albumService, GenreService genreService, ArtistService artistService, OrderService orderService)
         {
             this.albumService = albumService;
             this.genreService = genreService;
@@ -309,6 +309,16 @@ namespace GGMusicStore
                     album.Description = albumEditModel.Description;
                     album.AlbumNum = albumEditModel.AlbumNum;
                     album.Price = albumEditModel.Price;
+                    album.Discount = albumEditModel.Discount;
+                    //if (album.DiscountPrice > 0)
+                    //{
+                    //    album.DiscountPrice = albumEditModel.DiscountPrice;
+                    //}
+                    //else
+                    //{
+                    //    album.DiscountPrice = albumEditModel.Price * albumEditModel.Discount * new Decimal(0.1);
+                    //}
+                    album.DiscountPrice = albumEditModel.Price * albumEditModel.Discount * new Decimal(0.1);
                     if (album.AlbumStatus == false && albumEditModel.AlbumStatus == true)
                     {
                         album.GroundingTime = DateTime.Now;
@@ -330,6 +340,7 @@ namespace GGMusicStore
                 {
                     //添加
                     albumEditModel.GroundingTime = DateTime.Now;
+                    albumEditModel.DiscountPrice = albumEditModel.Price * albumEditModel.Discount * new Decimal(0.1);
                     albumService.Create(albumEditModel);
                     return Json(new { MessageType = 1, MessageContent = "成功添加音乐专辑" });
                 }

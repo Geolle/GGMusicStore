@@ -62,6 +62,23 @@
                         @Html.ValidationMessageFor(n => n.Price)
                     </div>
                 </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.Discount, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.Discount, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(n => n.Discount)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(n => n.DiscountPrice, htmlAttributes: new { @class = "col-md-4" })
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(n => n.DiscountPrice, new { @class = "form-control disabled" })
+                        @Html.ValidationMessageFor(n => n.DiscountPrice)
+                    </div>
+                    <div class="col-md-12">
+                    <!--<p class="help-block">根据折扣自动生成，手动输入后会已手动输入的数字为准</p>-->
+                    </div>
+                </div>
 
                 <div class="form-group">
                     @Html.LabelFor(n => n.AlbumArtUrl, htmlAttributes: new { @class = "col-md-4" })

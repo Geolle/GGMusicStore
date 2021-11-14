@@ -69,9 +69,25 @@ namespace Core.MusicInfo
         /// </summary>
         [Display(Name = "价格")]
         [Required(ErrorMessage = "请输入专辑价格")]
-        [Range(0, 100.00, ErrorMessage = "价格必须在0~100之间")]
+        //[Range(0, 100.00, ErrorMessage = "价格必须在0~100之间")]
         public decimal Price { get; set; }
 
+        /// <summary>
+        /// 折扣
+        /// </summary>
+        [Display(Name = "折扣")]
+        [Required(ErrorMessage = "请输入折扣")]
+        [Range(0, 10.00, ErrorMessage = "折扣必须在0~10之间")]
+        public decimal Discount { get; set; } = 10;
+
+        /// <summary>
+        /// 折后价格
+        /// </summary>
+        [Display(Name = "折后价格")]
+        [Required(ErrorMessage = "请输入折后价格")]
+        //[Range(0, 100.00, ErrorMessage = "折扣必须在0~10之间")]
+        public decimal DiscountPrice { get; set; }
+ 
         /// <summary>
         /// 音乐专辑标题图URL
         /// </summary>

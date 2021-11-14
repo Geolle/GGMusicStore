@@ -6,35 +6,38 @@
 </style>
 @helper IsNewAlbum(Album album = null)
 {
-if (album != null)
-{
-    if (album.GroundingTime.Subtract(DateTime.Now).Days < 7)
+    if (album != null)
     {
-    @:new-album
+        if (album.GroundingTime.Subtract(DateTime.Now).Days < 7)
+        {
+            @:new-album
+        }
     }
-}
 }
 @helper IsHotAlbum(Album album = null)
 {
-if ((album.OrderDetails != null && album.OrderDetails.Any()) && album.OrderDetails.Sum(n => n.Quantity) > 10)
-{
-    @:hot-album
-}
+    if ((album.OrderDetails != null && album.OrderDetails.Any()) && album.OrderDetails.Sum(n => n.Quantity) > 10)
+    {
+        @:hot-album
+    }
 }
 <!-- portfolio items start -->
 <div class="isotope-container row grid-space-20">
     @foreach (var item in Model)
     {
-    <div class="col-sm-6 col-md-3 isotope-item genre-@item.GenreId @IsNewAlbum(item) @IsHotAlbum(item)">
-        <div class="image-box">
-            <div class="overlay-container">
-                <img src="@item.AlbumArtUrl" alt="">
-                <a class="overlay" data-toggle="modal" data-target="#album-@item.AlbumId">
-                    <i class="fa fa-search-plus"></i>
-                    <span>@item.Genre.GenreName</span>
-                </a>
-            </div>
-            <a class="btn btn-default btn-block" data-toggle="modal" data-target="#album-@item.AlbumId" title="@item.AlbumName">@UIHelper.Truncate(item.AlbumName, 25)</a>
+        <div class="col-sm-6 col-md-3 isotope-item genre-@item.GenreId @IsNewAlbum(item) @IsHotAlbum(item)">
+            <div class="image-box">
+                <div class="overlay-container">
+                    <img src="@item.AlbumArtUrl" alt="">
+                    <a class="overlay" data-toggle="modal" data-target="#album-@item.AlbumId">
+                        <i class="fa fa-search-plus"></i>
+                        <span>@item.Genre.GenreName</span>
+                    </a>
+                </div>
+                <a class="btn btn-default btn-block" data-toggle="modal" data-target="#album-@item.AlbumId" title="@item.AlbumName">
+                    @UIHelper.Truncate(item.AlbumName, 25)
+                <p class=""><strong>价格:¥@item.DiscountPrice.ToString("0.00")  数量:@item.AlbumNum</strong></p>
+            </a>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="album-@item.AlbumId" tabindex="-1" role="dialog" aria-labelledby="album-@item.AlbumId-label" aria-hidden="true">
@@ -68,12 +71,12 @@ if ((album.OrderDetails != null && album.OrderDetails.Any()) && album.OrderDetai
         </div>
         <!-- Modal end -->
     </div>
-    }
+}
 </div>
 <!-- portfolio items end -->
 
 <script>
-    
+
 
     $('.genreName').on('click', function () {
         layer.tips($(this).data('genredescription'), $(this), { tips: [3, '#55acee'] });

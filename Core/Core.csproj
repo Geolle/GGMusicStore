@@ -96,6 +96,19 @@
     <Compile Include="Data\SampleData.cs" />
     <Compile Include="Genre\GenreService.cs" />
     <Compile Include="Genre\Genre.cs" />
+    <Compile Include="Migrations\202111140610527_InitialCreate.cs" />
+    <Compile Include="Migrations\202111140610527_InitialCreate.Designer.cs">
+      <DependentUpon>202111140610527_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111140745482_Album-v1.cs" />
+    <Compile Include="Migrations\202111140745482_Album-v1.Designer.cs">
+      <DependentUpon>202111140745482_Album-v1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111140750058_Album-v2.cs" />
+    <Compile Include="Migrations\202111140750058_Album-v2.Designer.cs">
+      <DependentUpon>202111140750058_Album-v2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Order\Order.cs" />
     <Compile Include="Order\OrderDetail.cs" />
     <Compile Include="Order\OrderService.cs" />
@@ -111,6 +124,17 @@
     <None Include="App.config" />
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202111140610527_InitialCreate.resx">
+      <DependentUpon>202111140610527_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111140745482_Album-v1.resx">
+      <DependentUpon>202111140745482_Album-v1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111140750058_Album-v2.resx">
+      <DependentUpon>202111140750058_Album-v2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -209,19 +209,23 @@ namespace GGMusicStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                {
-                    // 请不要显示该用户不存在或者未经确认
-                    return View("ForgotPasswordConfirmation");
-                }
+                //var user = UserManager.FindByEmail(model.Email);
+                //string code = UserManager.GeneratePasswordResetToken(user.Id);
+                //var result = UserManager.ResetPassword(user.Id, code, "12345467");
+
+                var user = UserManager.FindByEmail(model.Email);
+                //if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                //{
+                //    // 请不要显示该用户不存在或者未经确认
+                //    return View("ForgotPasswordConfirmation");
+                //}
 
                 // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                 // 发送包含此链接的电子邮件
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(user.Id, "重置密码", "请通过单击 <a href=\"" + callbackUrl + "\">此处</a>来重置你的密码");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
@@ -255,7 +259,7 @@ namespace GGMusicStore.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = UserManager.FindByEmail(model.Email);
             if (user == null)
             {
                 // 请不要显示该用户不存在

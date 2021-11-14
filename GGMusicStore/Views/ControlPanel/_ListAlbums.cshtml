@@ -10,6 +10,8 @@
                 <th>音乐人</th>
                 <th>专辑名称</th>
                 <th>专辑价格</th>
+                <th>折扣</th>
+                <th>折扣价格</th>
                 <th>剩余数量</th>
                 <th>操作</th>
             </tr>
@@ -18,13 +20,15 @@
             @foreach (var item in Model)
             {
             <tr>
-                <td title="@item.Genre.GenreName">@UIHelper.Truncate(item.Genre.GenreName, 30)</td>
-                <td title="@item.Artist.ArtistName">@UIHelper.Truncate(item.Artist.ArtistName, 30)</td>
+                <td title="@(item.Genre?.GenreName)">@UIHelper.Truncate(item.Genre?.GenreName, 30)</td>
+                <td title="@(item.Artist?.ArtistName)">@UIHelper.Truncate(item.Artist?.ArtistName, 30)</td>
                 <td title="@item.AlbumName">
                     @UIHelper.Truncate(item.AlbumName, 30)
                     @UIHelper.AlbumState(item.AlbumNum, item.AlbumStatus)
                 </td>
                 <td title="@item.Price">@item.Price</td>
+                <td title="@item.Discount">@item.Discount</td>
+                <td title="@item.DiscountPrice">@item.DiscountPrice</td>
                 <td>@item.AlbumNum</td>
                 <td>
                     @*<a href="javaScript:;" role="button" title="详情" onclick="layermodal('专辑详情','@Url.Action("_DetailAlbum","ControlPanel",new RouteValueDictionary { { "albumId",item.AlbumId} })','450px','500px')"><i class="fa fa-pencil fa-lg"></i></a>*@
@@ -41,7 +45,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <h3>@item.AlbumName</h3>
-                                    <h6>@item.Genre.GenreName -- @item.Artist.ArtistName</h6>
+                                    <h6>@(item.Genre?.GenreName) -- @(item.Artist?.ArtistName)</h6>
                                     <div class="row">
                                         <div class="col-md-7">
                                             @item.Description
